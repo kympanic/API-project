@@ -7,9 +7,13 @@ module.exports = (sequelize, DataTypes) => {
 		toSafeObject() {
 			//context will be the User instance
 			const { id, username, email } = this;
+			return { id, username, email };
 		}
 		validatePassword(password) {
 			return bcrypt.compareSync(password, this.hashedPassword.toString());
+		}
+		static getCurrentUserById(id) {
+			return User.scope("currentUser").findByPk(id);
 		}
 		static async login({ credential, password }) {
 			const { Op } = require("sequelize");
